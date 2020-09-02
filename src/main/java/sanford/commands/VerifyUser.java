@@ -3,27 +3,27 @@ package sanford.commands;
 import net.dv8tion.jda.api.entities.*;
 import sanford.util.Util;
 
-public class VerifyUser {
-
+public class VerifyUser
+{
     private String mention, role;
     private User user;
-    private Guild guild;
 
-    public VerifyUser(Message msg) {
-        MessageChannel channel = msg.getChannel();
-        if (msg.getContentRaw().toLowerCase().equals("!verify")){
+    public VerifyUser(Message msg)
+    {
+        if (msg.getContentRaw().toLowerCase().equals("!verify"))
+        {
             user = msg.getAuthor();
             mention = msg.getAuthor().getAsMention();
             role = "verified";
 
             Util.deleteMessage(msg);
             System.out.println("Testing");
-            if (Util.hasRole(user, role)) {
+            if (Util.hasRole(user, role))
+            {
                 Util.directMessage(user, "You are already verified. We are glad you want to be verified again though.");
             }
             else
             {
-
             Util.addRole(msg.getAuthor(), role);
             Util.directMessage(user, "You have received the role Verified. Welcome to the Brass Brewery");
             }

@@ -13,7 +13,6 @@ import java.nio.channels.Channel;
 
 public class MessageListener extends ListenerAdapter
 {
-    public MessageListener(){}
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
