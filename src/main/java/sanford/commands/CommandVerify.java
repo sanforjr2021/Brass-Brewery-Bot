@@ -3,12 +3,12 @@ package sanford.commands;
 import net.dv8tion.jda.api.entities.*;
 import sanford.util.Util;
 
-public class VerifyUser
+public class CommandVerify
 {
     private String mention, role;
     private User user;
 
-    public VerifyUser(Message msg)
+    public CommandVerify(Message msg)
     {
         if (msg.getContentRaw().toLowerCase().equals("!verify"))
         {

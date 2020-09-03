@@ -3,9 +3,9 @@ package sanford.commands;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
-public class Ping
+public class CommandPing
 {
-    public Ping(Message msg)
+    public CommandPing(Message msg)
     {
             MessageChannel channel = msg.getChannel();
             long time = System.currentTimeMillis();

@@ -5,9 +5,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import sanford.util.MessageListener;
 import sanford.util.ReadyListener;
 
-import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 
 public class BrassBreweryBot
@@ -57,6 +57,11 @@ public class BrassBreweryBot
             System.out.println("Startup Complete!"); //Inform Pterodactyl the bot is running
 
     }
+    public static void main(String Args[]) throws LoginException
+    {
+        BrassBreweryBot brassBreweryBot = new BrassBreweryBot(Args);
+    }
+
     //Getters
     public static MessageChannel getVerifyChannel()
     {
@@ -69,11 +74,5 @@ public class BrassBreweryBot
     public static VoiceChannel getAFKChannel()
     {
         return afkChannel;
-    }
-    public static void main(String Args[]) throws LoginException
-    {
-        System.out.println("Args[0] = " + Args[0]);
-        System.out.println("Args[1] = " + Args[1]);
-        BrassBreweryBot brassBreweryBot = new BrassBreweryBot(Args);
     }
 }
