@@ -5,7 +5,7 @@ import sanford.util.Util;
 
 public class CommandVerify
 {
-    private String mention, role;
+    private String role;
     private User user;
 
     public CommandVerify(Message msg)
@@ -13,18 +13,16 @@ public class CommandVerify
         if (msg.getContentRaw().toLowerCase().equals("!verify"))
         {
             user = msg.getAuthor();
-            mention = msg.getAuthor().getAsMention();
-            role = "verified";
+            role = "722678454624976949";
 
             Util.deleteMessage(msg);
-            System.out.println("Testing");
-            if (Util.hasRole(user, role))
+            if (Util.hasRole(msg.getMember(), role))
             {
                 Util.directMessage(user, "You are already verified. We are glad you want to be verified again though.");
             }
             else
             {
-            Util.addRole(msg.getAuthor(), role);
+            Util.addRole(msg.getMember(), role);
             Util.directMessage(user, "You have received the role Verified. Welcome to the Brass Brewery");
             }
         }

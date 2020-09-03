@@ -45,6 +45,12 @@ public class CommandHandler {
         }//end of Verify Channel
         else
         {
+            switch(messages[0]){
+                case "!role":
+                    new CommandRole(msg);
+                    break;
+            }
+
             commandUniversalChannel();
         }
     }
@@ -63,9 +69,6 @@ public class CommandHandler {
             {
                 case "!ping":
                     new CommandPing(msg);
-                    break;
-                case "!role":
-                    new CommandRole(msg);
                     break;
             }//end of switch
         }//end of starts with !
