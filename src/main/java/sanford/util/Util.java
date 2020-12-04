@@ -41,6 +41,25 @@ public class Util {
         }
     }
 
+    public static Boolean removeRole(Member user, String roleID) {
+        if (!hasRole(user, roleID)) {
+            logInfo("Cannot remove role with ID  " + roleID + " to " + user.getNickname() +
+                    " because they do not have the role.");
+            return false;
+        } else {
+            try{
+                Role role = BrassBreweryBot.getGuild().getRoleById(roleID);
+                BrassBreweryBot.getGuild().removeRoleFromMember(user, role).queue();
+                logInfo("Removed role " + roleID + " to " + user.getNickname());
+                return true;
+            } catch (Exception e) {
+                logError("Failed to remove role with ID " + roleID + " to " + user.getNickname());
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
+
     public static void directMessage(User user, String message) {
         user.openPrivateChannel().queue((dm) -> //creates event
         {

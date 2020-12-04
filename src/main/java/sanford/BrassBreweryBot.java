@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import sanford.data.ConfigHandler;
+import sanford.data.SQLServerHandler;
 import sanford.util.MessageListener;
 import sanford.util.ReadyListener;
 
@@ -30,18 +31,16 @@ public class BrassBreweryBot {
 
     //On Shutdown command
     public void addShutdownThreat() {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Shutting Down Brass Brewery Bot");
-                //on shutdown
-                jda.shutdown();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
+            System.out.println("Shutting Down Brass Brewery Bot");
+            //on shutdown
+            jda.shutdown();
+        }));
     }
 
     //on startup
@@ -49,6 +48,12 @@ public class BrassBreweryBot {
         guild = jda.getGuildById(configHandler.getProperty("serverID"));
         verifyChannel = guild.getTextChannelById("737105063948058664"); //TODO:Replace from config or Database
         afkChannel = guild.getAfkChannel();
+        new SQLServerHandler(
+                configHandler.getProperty("host"),
+                configHandler.getProperty("database"),
+                configHandler.getProperty("username"),
+                configHandler.getProperty("password")
+        );
         //Inform Pterodactyl the bot is running
         System.out.println("Startup Complete!");
 
