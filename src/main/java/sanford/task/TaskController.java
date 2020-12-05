@@ -12,9 +12,8 @@ public class TaskController {
         voicePointsTimer = new Timer("Voice Point");
         updateRolesTimer = new Timer("Update Role");
         textPointsTimer.scheduleAtFixedRate(new RewardTextPoints(),290000 , 290000);
-        voicePointsTimer.scheduleAtFixedRate(new RewardVoicePoints(), 440000, 440000);
-        updateRolesTimer.scheduleAtFixedRate(new UpdateRolesDaily(), 60000, 86390000);
-
+        voicePointsTimer.scheduleAtFixedRate(new RewardVoicePoints(), 60000, 290000);
+        updateRolesTimer.scheduleAtFixedRate(new UpdateRolesDaily(), 60000, 43200000);
     }
 
     public void stopAllTask(){

@@ -31,7 +31,8 @@ public class CommandHandler extends Command {
                     case "!points":
                         new Points(getMessage());
                         break;
-                    default:
+                    case "!top":
+                        new Top(getMessage());
                         break;
                 }//end of switch
             }//end of else

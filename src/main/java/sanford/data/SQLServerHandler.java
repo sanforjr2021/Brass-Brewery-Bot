@@ -95,7 +95,12 @@ public class SQLServerHandler {
                 String query = "UPDATE GuildMember " +
                         "SET GuildMember.Currency = GuildMember.Currency +" + value  +
                         " WHERE GuildMember.ID = '" +id + "'";
-                executeSQLStatement(query);
+                if(executeSQLStatement(query) == 0){
+                    MemberDataContainer memberDataContainer = new MemberDataContainer(id, value);
+                    query =  "INSERT INTO GuildMember (GuildMember.ID, GuildMember.Currency)\n" +
+                            "VALUES (" +memberDataContainer.getId() + " ,"+ memberDataContainer.getCurrency() + ")";
+                    executeSQLStatement(query);
+                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
                 logger.warn("Could not find user " + id + ". Adding user to the database.");
@@ -108,6 +113,27 @@ public class SQLServerHandler {
             }
         }
         closeDBConnection();
+    }
+
+    public static ArrayList<MemberDataContainer> getTop10Members() throws SQLException {
+        String query = " SELECT * "+
+                "FROM GuildMember " +
+                "ORDER BY GuildMember.Currency DESC " +
+                "LIMIT 10 ";
+        openDBConnection();
+        ResultSet rs = createResultSet(query);
+        int columnCount = getColumnCountFromResultSet(rs);
+        ArrayList<MemberDataContainer> memberDataContainers = new ArrayList<MemberDataContainer>();
+        while (rs.next()) {
+            StringBuilder row = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                row.append(rs.getString(i)).append(", ");
+            }//end of for
+            MemberDataContainer memberDataContainer = new MemberDataContainer(row.toString());
+            memberDataContainers.add(memberDataContainer);
+        }
+        closeDBConnection();
+        return memberDataContainers;
     }
 
     ////////////////////////
@@ -169,13 +195,4 @@ public class SQLServerHandler {
     //////////////////////////
     //MemberHasRole Queries
     /////////////////////////
-
-    public static void main (String[] args) throws SQLException {
-        SQLServerHandler sqlServerHandler = new SQLServerHandler("204.44.81.104:3306", "s14_distilled_spirits", "u14_2k9mqAZvcx", "wZvxjQ9@gkv6va5H+sn.11+S");
-        ArrayList<String> ids = new ArrayList<>();
-        ids.add("139174597370183680");//me 0
-        ids.add("235210338541371392");//nik 0
-        ids.add("148891552276676609"); //kleaver 0
-        addPointsToMember(ids, 5);
-    }
 }

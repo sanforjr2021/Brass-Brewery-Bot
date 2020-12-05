@@ -1,9 +1,11 @@
 package sanford.commands;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.requests.RestAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sanford.BrassBreweryBot;
@@ -51,6 +53,15 @@ public abstract class Command {
 
     public Message getMessage() {
         return message;
+    }
+
+    public JDA getJda() {
+        return message.getJDA();
+    }
+
+    public User getUserByID(String id){
+        RestAction<User> userRestAction = getMessage().getJDA().retrieveUserById(Long.parseLong(id));
+        return userRestAction.complete();
     }
 
     public void logError(String error) {
