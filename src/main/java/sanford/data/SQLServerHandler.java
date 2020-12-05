@@ -1,8 +1,10 @@
 package sanford.data;
 
+import net.dv8tion.jda.api.managers.GuildManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.management.Query;
 import java.net.URLEncoder;
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,9 +38,9 @@ public class SQLServerHandler {
         return metadata.getColumnCount();
     }
 
-    private static void executeSQLStatement(String query) throws SQLException {
+    private static int executeSQLStatement(String query) throws SQLException {
             Statement statement = conn.createStatement();
-            statement.executeUpdate(query);
+            return statement.executeUpdate(query);
     }
 
     private static void openDBConnection() throws SQLException {
@@ -86,6 +88,28 @@ public class SQLServerHandler {
         closeDBConnection();
     }
 
+    public static void addPointsToMember(ArrayList<String> ids, int value) throws SQLException {
+        openDBConnection();
+        for(String id : ids){
+            try {
+                String query = "UPDATE GuildMember " +
+                        "SET GuildMember.Currency = GuildMember.Currency +" + value  +
+                        " WHERE GuildMember.ID = '" +id + "'";
+                executeSQLStatement(query);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                logger.warn("Could not find user " + id + ". Adding user to the database.");
+                MemberDataContainer memberDataContainer = new MemberDataContainer(id, value);
+                try {
+                    addMember(memberDataContainer);
+                } catch (SQLException e) {
+                    logger.error("Failed to register user with id " + id);
+                }
+            }
+        }
+        closeDBConnection();
+    }
+
     ////////////////////////
     //Role Queries
     ///////////////////////
@@ -124,7 +148,7 @@ public class SQLServerHandler {
         return new RoleDataContainer(row.toString());
     }
 
-    public static String getRoleIDbyRoleName(String name) throws SQLException {
+    public static String getRoleIDbyRoleName(String name)throws SQLException {
         String query = "SELECT RoleID " +
                 " FROM RoleNames " +
                 " WHERE RoleNames.RoleName = '" + name +"'";
@@ -148,20 +172,10 @@ public class SQLServerHandler {
 
     public static void main (String[] args) throws SQLException {
         SQLServerHandler sqlServerHandler = new SQLServerHandler("204.44.81.104:3306", "s14_distilled_spirits", "u14_2k9mqAZvcx", "wZvxjQ9@gkv6va5H+sn.11+S");
-        /*
-        sqlServerHandler.getRoles();
-
-        System.out.println("Getting user");
-        MemberDataContainer memberDataContainer = sqlServerHandler.getMemberDataContainer("100000000000000001");
-        System.out.println(memberDataContainer.toString());
-        System.out.println("Getting list of roles");
-        ArrayList<RoleDataContainer> roleDataContainersList = sqlServerHandler.getRoles();
-        System.out.println("Total of  "+ roleDataContainersList.size() + " roles.");
-        for(RoleDataContainer roleDataContainers : roleDataContainersList){
-            System.out.println(roleDataContainers.shopString());
-        }
-
-         */
-        System.out.println(getRoleIDbyRoleName("drag"));
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add("139174597370183680");//me 0
+        ids.add("235210338541371392");//nik 0
+        ids.add("148891552276676609"); //kleaver 0
+        addPointsToMember(ids, 5);
     }
 }

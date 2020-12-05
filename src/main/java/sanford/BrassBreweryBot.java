@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import sanford.data.ConfigHandler;
 import sanford.data.SQLServerHandler;
+import sanford.task.TaskController;
 import sanford.util.MessageListener;
 import sanford.util.ReadyListener;
 
@@ -19,6 +20,7 @@ public class BrassBreweryBot {
     private static MessageChannel verifyChannel;
     private static VoiceChannel afkChannel;
     private static ConfigHandler configHandler = new ConfigHandler();
+    private static TaskController taskController = new TaskController();
     public static final String VERSION = "1.0"; //represents config version
 
     public BrassBreweryBot() throws LoginException {
@@ -34,13 +36,16 @@ public class BrassBreweryBot {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 Thread.sleep(200);
+                System.out.println("Shutting Down Brass Brewery Bot");
+                taskController.stopAllTask();
+                jda.getPresence().setStatus(OnlineStatus.OFFLINE);
+                jda.shutdown();
+                System.out.println("Bot Stopped");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Shutting Down Brass Brewery Bot");
-            //on shutdown
-            jda.shutdown();
         }));
+
     }
 
     //on startup
@@ -54,6 +59,7 @@ public class BrassBreweryBot {
                 configHandler.getProperty("username"),
                 configHandler.getProperty("password")
         );
+
         //Inform Pterodactyl the bot is running
         System.out.println("Startup Complete!");
 
