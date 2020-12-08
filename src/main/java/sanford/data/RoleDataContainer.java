@@ -14,6 +14,7 @@ public class RoleDataContainer {
         this.name = name;
         this.tier = tier;
     }
+
     public RoleDataContainer(String row){
         String[] values = row.split(",");
         this.id = values[0].trim();
@@ -23,26 +24,27 @@ public class RoleDataContainer {
         this.tier = Integer.parseInt(values[4].trim());
     }
 
+    public RoleDataContainer() {
+        id = "INVALID";
+        cost = 0;
+        isMonthly = "INVALID";
+        name = "INVALID";
+        tier = -10000;
+    }
+
     public String shopString(){
         String toString;
-        toString = "**" + name + "**\t\t";
+        toString = name;
         if(cost != 0){
-            toString += + cost + " points";
-            if(isMonthly.equals("1")){
-                toString += " per month";
+            int numOfSpaces = 30-name.length();
+            for(int i = 0; i <numOfSpaces; i++){
+                toString += " ";
             }
-        }
-        if(tier == -1){
-            toString += "(Server Role)";
-        }
-        else if(tier == 0){
-            toString += "(Color Role)";
-        }
-        else{
-            toString += "(Rank " + tier +")";
+            toString += cost;
         }
         return toString;
     }
+
 
     //getters
     public String getId() {

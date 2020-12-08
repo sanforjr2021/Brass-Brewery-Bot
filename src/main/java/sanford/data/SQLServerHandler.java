@@ -1,6 +1,8 @@
 package sanford.data;
 
 import net.dv8tion.jda.api.managers.GuildManager;
+import net.dv8tion.jda.api.requests.restaction.GuildAction;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,9 @@ public class SQLServerHandler {
         }
     }
 
+    //////////////////////
+    //Query Utils
+    ///////////////////////
     private static ResultSet createResultSet(String query) throws SQLException {
         openDBConnection();
         Statement statement = conn.createStatement();
@@ -38,7 +43,7 @@ public class SQLServerHandler {
         return metadata.getColumnCount();
     }
 
-    private static int executeSQLStatement(String query) throws SQLException {
+    private static int executeSQLStatement(String query) throws SQLException, SQLIntegrityConstraintViolationException {
             Statement statement = conn.createStatement();
             return statement.executeUpdate(query);
     }
@@ -51,6 +56,21 @@ public class SQLServerHandler {
         conn.close();
     }
 
+    private static ArrayList<RoleDataContainer> getRoleDataContainers(String query) throws SQLException {
+        ResultSet rs = createResultSet(query);
+        int columnCount = getColumnCountFromResultSet(rs);
+        ArrayList<RoleDataContainer> roleDataContainerList = new ArrayList<RoleDataContainer>();
+        while (rs.next()) {
+            StringBuilder row = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                row.append(rs.getString(i)).append(", ");
+            }//end of for
+            RoleDataContainer roleDataContainer = new RoleDataContainer(row.toString());
+            roleDataContainerList.add(roleDataContainer);
+        }//end of while
+        closeDBConnection();
+        return roleDataContainerList;
+    }
 
     ////////////////////////////
     //Member Queries
@@ -136,6 +156,16 @@ public class SQLServerHandler {
         return memberDataContainers;
     }
 
+    public static void updateMembersCurrency(MemberDataContainer member) throws SQLException{
+        openDBConnection();
+        String query = "UPDATE GuildMember " +
+                "SET GuildMember.Currency = " + member.getCurrency()  +
+                " WHERE GuildMember.ID = '" + member.getId() + "'";
+        executeSQLStatement(query);
+        closeDBConnection();
+    }
+
+
     ////////////////////////
     //Role Queries
     ///////////////////////
@@ -144,19 +174,15 @@ public class SQLServerHandler {
         String query = "SELECT * \n" +
                             "FROM Role "+
                             "ORDER BY Role.RoleTier ASC, Role.Cost DESC, Role.Name DESC";
-        ResultSet rs = createResultSet(query);
-        int columnCount = getColumnCountFromResultSet(rs);
-        ArrayList<RoleDataContainer> roleDataContainerList = new ArrayList<RoleDataContainer>();
-        while (rs.next()) {
-            StringBuilder row = new StringBuilder();
-            for (int i = 1; i <= columnCount; i++) {
-                row.append(rs.getString(i)).append(", ");
-            }//end of for
-            RoleDataContainer roleDataContainer = new RoleDataContainer(row.toString());
-            roleDataContainerList.add(roleDataContainer);
-        }//end of while
-        closeDBConnection();
-        return roleDataContainerList;
+        return getRoleDataContainers(query);
+    }
+
+    public static ArrayList<RoleDataContainer> getRolesForRankUp() throws SQLException {
+        String query = "SELECT * \n" +
+                "FROM Role "+
+                "WHERE Role.RoleTier > 0 " +
+                "ORDER BY Role.RoleTier ASC";
+        return getRoleDataContainers(query);
     }
 
     public static RoleDataContainer getRoleById(String id) throws  SQLException{
@@ -190,6 +216,23 @@ public class SQLServerHandler {
         closeDBConnection();
         return solution;
 
+    }
+
+    public static RoleDataContainer getRoleByTier(int tier) throws SQLException {
+        String query = "SELECT * \n" +
+                "FROM Role " +
+                "WHERE Role.RoleTier = '" + tier + "'";
+        RoleDataContainer roleDataContainer = new RoleDataContainer();
+        ResultSet rs = createResultSet(query);
+        int columnCount = getColumnCountFromResultSet(rs);
+        while (rs.next()) { //TODO: See if nescarry to function with the rs.next()
+            StringBuilder row = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                row.append(rs.getString(i)).append(", ");
+            }//end of for
+            roleDataContainer = new RoleDataContainer(row.toString());
+        }
+        return  roleDataContainer;
     }
 
     //////////////////////////

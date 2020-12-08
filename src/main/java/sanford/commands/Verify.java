@@ -6,6 +6,7 @@ import sanford.data.SQLServerHandler;
 import sanford.util.Util;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class Verify extends Command{
     public Verify(Message msg){
@@ -27,8 +28,11 @@ public class Verify extends Command{
                 Util.directMessage(getUser(), "You have received the role Verified. Welcome to the Brass Brewery");
                 try {
                     SQLServerHandler.addMember(new MemberDataContainer(getUser().getId()));
+                } catch (SQLIntegrityConstraintViolationException throwables){
+                    logError(getUser().getAsTag() + " is already inside the database. Not adding the user to the database");
                 } catch (SQLException throwables) {
-                    logError("Failed to add the user " + getUser().getAsTag() +" to the database after verifying");
+                    logWarning("Failed to add the user " + getUser().getAsTag() +" to the database after verifying." +
+                            "\nIf they have joined the server before, this error is to be expected why this error is popping up");
                     throwables.printStackTrace();
                 }
             }

@@ -12,7 +12,13 @@ public class MemberDataContainer {
     public MemberDataContainer(String row) {
         String[] values = row.split(",");
         this.id = values[0].trim();
-        this.currency = Integer.parseInt(values[1].trim());
+        try{
+            this.currency = Integer.parseInt(values[1].trim());
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            this.currency = 0;
+        }
+
     }
 
     public String getId() {
@@ -25,6 +31,7 @@ public class MemberDataContainer {
 
     public void setCurrency(int currency) {
         this.currency = currency;
+        System.out.println("Currency set to " + this.currency);
     }
 
     public String toString() {

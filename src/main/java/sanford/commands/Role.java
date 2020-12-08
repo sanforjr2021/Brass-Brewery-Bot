@@ -39,10 +39,19 @@ public class Role extends Command {
     private String generateListOfRoles() throws SQLException {
         ArrayList<RoleDataContainer> roleDataContainersList = SQLServerHandler.getRoles();
         StringBuilder solution = new StringBuilder();
-        for (RoleDataContainer roleDataContainers : roleDataContainersList) {
-            solution.append(roleDataContainers.shopString() + "\n");
+        int currentTier = -1;
+        solution.append("**Server Roles**\n```Role                          Points Per Month\n");
+        for (RoleDataContainer roleDataContainer : roleDataContainersList) {
+            if(roleDataContainer.getTier() < 1){
+                if(roleDataContainer.getTier() != currentTier ){
+                    currentTier = roleDataContainer.getTier();
+                    solution.append("```\n**Colored Roles**\n```" +
+                            "Role                          Points Per Month\n");
+                }
+                solution.append(roleDataContainer.shopString() + "\n");
+            }
         }
-        return solution.toString();
+        return solution.toString() + "```";
     }
 
     private void helpArgument() {

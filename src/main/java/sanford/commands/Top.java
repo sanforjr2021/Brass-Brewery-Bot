@@ -18,18 +18,25 @@ public class Top extends Command {
         try {
             ArrayList<MemberDataContainer> memberDataContainers = SQLServerHandler.getTop10Members();
             StringBuilder solution = new StringBuilder();
-            solution.append(getUser().getAsMention() + "\n");
+            solution.append(getUser().getAsMention() + "\n```");
             for (int i = 0; i < memberDataContainers.size(); i++) {
                 solution.append(i+ 1 +". ");
                 MemberDataContainer memberDataContainer = memberDataContainers.get(i);
                 User user = getUserByID(memberDataContainer.getId());
                 solution.append(user.getAsTag());
-                for(int x = 0; x < 60-user.getAsTag().length(); x++){
-                    solution.append(" ");
+                if(i <= 8){
+                    for(int x = 0; x < 50-user.getAsTag().length(); x++){
+                        solution.append(" ");
+                    }
+                }
+                else { //must remove 1 space as 10 is 2 chars instead of 1.
+                    for (int x = 0; x < 49 - user.getAsTag().length(); x++) {
+                        solution.append(" ");
+                    }
                 }
                 solution.append(memberDataContainer.getCurrency() + " Points\n");
             }
-            getChannel().sendMessage(solution.toString()).queue();
+            getChannel().sendMessage(solution.toString() + "```").queue();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

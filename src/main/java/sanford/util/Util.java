@@ -1,6 +1,7 @@
 package sanford.util;
 
 import net.dv8tion.jda.api.entities.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sanford.BrassBreweryBot;
@@ -23,22 +24,24 @@ public class Util {
     }
 
     public static Boolean addRole(Member user, String roleID) {
+        Boolean addedMember;
         if (hasRole(user, roleID)) {
             logInfo("Cannot add role with ID  " + roleID + " to " + user.getNickname() +
                     " because they already have the role.");
-            return false;
+            addedMember  = false;
         } else {
             try {
                 Role role = BrassBreweryBot.getGuild().getRoleById(roleID);
                 BrassBreweryBot.getGuild().addRoleToMember(user, role).queue();
                 logInfo("Added role " + roleID + " to " + user.getNickname());
-                return true;
+                addedMember = true;
             } catch (Exception e) {
-                logError("Failed to apply role with ID " + roleID + " to " + user.getNickname());
+                logError("Failed to apply role with ID " + roleID);
                 e.printStackTrace();
-                return false;
+                addedMember =  false;
             }
         }
+        return addedMember;
     }
 
     public static Boolean removeRole(Member user, String roleID) {

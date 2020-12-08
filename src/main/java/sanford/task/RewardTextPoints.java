@@ -1,10 +1,7 @@
 package sanford.task;
 
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.requests.RestAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sanford.BrassBreweryBot;
 import sanford.data.SQLServerHandler;
 
 import java.sql.SQLException;
@@ -22,7 +19,6 @@ public class RewardTextPoints extends TimerTask {
 
     public static void addUser(String id) {
         if (!usersIds.contains(id)) {
-            System.out.println("Added User with id of " + id);
             usersIds.add(id);
         }
     }
@@ -30,11 +26,6 @@ public class RewardTextPoints extends TimerTask {
     @Override
     public void run() {
         try {
-            System.out.println("Adding the following user points:");
-            for (String id : usersIds) {
-                RestAction<User> userRestAction = BrassBreweryBot.getGuild().getJDA().retrieveUserById(Long.parseLong(id));
-                System.out.println(userRestAction.complete().getAsTag());
-            }
             SQLServerHandler.addPointsToMember(usersIds, 1);
         } catch (SQLException throwables) {
             throwables.printStackTrace();

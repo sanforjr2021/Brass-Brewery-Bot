@@ -34,6 +34,9 @@ public class CommandHandler extends Command {
                     case "!top":
                         new Top(getMessage());
                         break;
+                    case "!rankup":
+                        new RankUp(getMessage());
+                        break;
                 }//end of switch
             }//end of else
         }//end of if
