@@ -1,6 +1,7 @@
 package sanford.commands;
 
 import net.dv8tion.jda.api.entities.*;
+import sanford.BrassBreweryBot;
 import sanford.data.MemberDataContainer;
 import sanford.data.SQLServerHandler;
 import sanford.util.Util;
@@ -16,15 +17,14 @@ public class Verify extends Command{
 
     @Override
     public void executeCommand() {
-        String role  = "722678454624976949";
+        String roleID  = Util.getVerifyRole().getId();
         if (getArguments(0).equals("!verify")) {
             //if has role, inform them they have it after deleting the message
-            if (Util.hasRole(getMember(), role)) {
+            if (Util.hasRole(getMember(), roleID)) {
                 Util.directMessage(getUser(), "You are already verified. We are glad you want to be verified again though.");
-
             } else {
                 //if they don't have the role, add it to them and register in the DB
-                Util.addRole(getMember(), role);
+                BrassBreweryBot.getGuild().addRoleToMember(getMember(), Util.getVerifyRole()).queue();
                 Util.directMessage(getUser(), "You have received the role Verified. Welcome to the Brass Brewery");
                 try {
                     SQLServerHandler.addMember(new MemberDataContainer(getUser().getId()));

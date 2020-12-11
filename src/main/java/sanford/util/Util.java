@@ -101,4 +101,8 @@ public class Util {
 
         }
     }
+
+    public static Role getVerifyRole(){
+        return BrassBreweryBot.getGuild().getRoleById("722678454624976949");
+    }
 }
