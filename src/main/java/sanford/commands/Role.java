@@ -39,18 +39,11 @@ public class Role extends Command {
     private String generateListOfRoles() throws SQLException {
         ArrayList<RoleDataContainer> roleDataContainersList = SQLServerHandler.getRoles();
         StringBuilder solution = new StringBuilder();
-        int currentTier = -1;
-        solution.append("**Server Roles**\n```Role                          Points Per Month\n");
+        solution.append("**Server Roles**\n```");
         for (RoleDataContainer roleDataContainer : roleDataContainersList) {
-            if(roleDataContainer.getTier() < 1){
-                if(roleDataContainer.getTier() != currentTier ){
-                    currentTier = roleDataContainer.getTier();
-                    solution.append("```\n**Colored Roles**\n```" +
-                            "Role                          Points Per Month\n");
-                }
+            if(roleDataContainer.getTier() == -1)
                 solution.append(roleDataContainer.shopString() + "\n");
             }
-        }
         return solution.toString() + "```";
     }
 
@@ -93,7 +86,6 @@ public class Role extends Command {
                 getChannel().sendMessage(getUser().getAsMention() + " I failed to remove the role to you. If you think this is an error, contact an administrator.").queue();
                 getMessage().addReaction("U+274C").queue(); //Red X
             }
-
         } else {
             if (Util.addRole(getMember(), roleID)) {
                 getChannel().sendMessage(getUser().getAsMention() + " You have been added the role.").queue();
