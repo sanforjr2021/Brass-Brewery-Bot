@@ -32,8 +32,6 @@ public class Role extends Command {
                 throwables.printStackTrace();
             }
         }
-
-
     }
 
     private String generateListOfRoles() throws SQLException {
@@ -76,23 +74,24 @@ public class Role extends Command {
         }
         getMessage().addReaction("U+274C").queue(); //Red X Emoji
     }
-
+    private void sendMessageWithReaction(String message, String reaction){
+        getChannel().sendMessage(message).queue();
+        getMessage().addReaction(reaction).queue(); //Check Mark
+    }
     private void addRoleToUser(String roleID) {
         if (Util.hasRole(getMember(), roleID)) {
             if (Util.removeRole(getMember(), roleID)) {
-                getChannel().sendMessage(getUser().getAsMention() + "I removed the role from you.").queue();
-                getMessage().addReaction("U+2705").queue(); //Check Mark
+                sendMessageWithReaction(getUser().getAsMention() + "I removed the role from you.","U+2705" );
             } else {
-                getChannel().sendMessage(getUser().getAsMention() + " I failed to remove the role to you. If you think this is an error, contact an administrator.").queue();
-                getMessage().addReaction("U+274C").queue(); //Red X
+                sendMessageWithReaction(getUser().getAsMention() + " I failed to remove the role to you. Please contact " +
+                        "a staff member if this continues to occur.","U+274C");
             }
         } else {
             if (Util.addRole(getMember(), roleID)) {
-                getChannel().sendMessage(getUser().getAsMention() + " You have been added the role.").queue();
-                getMessage().addReaction("U+2705").queue(); //Check Mark
+                sendMessageWithReaction(getUser().getAsMention() + " You have been added the role.","U+2705");
             } else {
-                getChannel().sendMessage(getUser().getAsMention() + " I failed to add the role to you. If you think this is an error, contact an administrator.").queue();
-                getMessage().addReaction("U+274C").queue(); //Red X
+                sendMessageWithReaction(getUser().getAsMention() + " I failed to remove the role to you. Please contact " +
+                        "a staff member if this continues to occur.","U+274C");
             }
         }
     }

@@ -31,6 +31,9 @@ public class RewardVoicePoints extends TimerTask {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        logger.info("Added " + ids.size()*2 + " points to " + ids.size() + " different users.");
+        if(ids.size() > 0){
+            logger.info("Added " + ids.size()*2 + " points to " + ids.size() + " different users.");
+        }
+
     }
 }

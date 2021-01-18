@@ -12,17 +12,6 @@ import java.net.UnknownHostException;
 public class Util {
     private static final Logger logger = LoggerFactory.getLogger("UtilLog");
 
-    public static Boolean deleteMessage(Message msg) {
-        try {
-            msg.delete().queue();
-            logInfo("Deleted Message in " + msg.getChannel().getName());
-            return true;
-        } catch (Exception e) {
-            logError("Failed to delete message in " + msg.getChannel().getName());
-            return false;
-        }
-    }
-
     public static Boolean addRole(Member user, String roleID) {
         Boolean addedMember;
         if (hasRole(user, roleID)) {
@@ -33,7 +22,6 @@ public class Util {
             try {
                 Role role = BrassBreweryBot.getGuild().getRoleById(roleID);
                 BrassBreweryBot.getGuild().addRoleToMember(user, role).queue();
-                logInfo("Added role " + roleID + " to " + user.getNickname());
                 addedMember = true;
             } catch (Exception e) {
                 logError("Failed to apply role with ID " + roleID);
@@ -45,30 +33,18 @@ public class Util {
     }
 
     public static Boolean removeRole(Member user, String roleID) {
-        if (!hasRole(user, roleID)) {
-            logInfo("Cannot remove role with ID  " + roleID + " to " + user.getNickname() +
-                    " because they do not have the role.");
-            return false;
-        } else {
+        boolean hasRemovedRole = false;
+        if (hasRole(user, roleID)) {
             try{
                 Role role = BrassBreweryBot.getGuild().getRoleById(roleID);
                 BrassBreweryBot.getGuild().removeRoleFromMember(user, role).queue();
-                logInfo("Removed role " + roleID + " to " + user.getNickname());
-                return true;
+                hasRemovedRole = true;
             } catch (Exception e) {
                 logError("Failed to remove role with ID " + roleID + " to " + user.getNickname());
                 e.printStackTrace();
-                return false;
             }
         }
-    }
-
-    public static void directMessage(User user, String message) {
-        user.openPrivateChannel().queue((dm) -> //creates event
-        {
-            dm.sendMessage(message).queue();
-            dm.close();
-        });
+        return hasRemovedRole;
     }
 
     public static Boolean hasRole(Member user, String roleID) {
@@ -100,9 +76,5 @@ public class Util {
             return "Null";
 
         }
-    }
-
-    public static Role getVerifyRole(){
-        return BrassBreweryBot.getGuild().getRoleById("722678454624976949");
     }
 }

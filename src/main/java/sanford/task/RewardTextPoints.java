@@ -30,7 +30,9 @@ public class RewardTextPoints extends TimerTask {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        logger.info("Added " + usersIds.size() + " points to " + usersIds.size() + " different users.");
+        if(usersIds.size() > 0){
+            logger.info("Added " + usersIds.size() + " points to " + usersIds.size() + " different users.");
+        }
         usersIds.clear();
     }
 }

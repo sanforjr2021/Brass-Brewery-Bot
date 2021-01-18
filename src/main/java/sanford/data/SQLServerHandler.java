@@ -1,12 +1,7 @@
 package sanford.data;
 
-import net.dv8tion.jda.api.managers.GuildManager;
-import net.dv8tion.jda.api.requests.restaction.GuildAction;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.management.Query;
 import java.net.URLEncoder;
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,7 +38,7 @@ public class SQLServerHandler {
         return metadata.getColumnCount();
     }
 
-    private static int executeSQLStatement(String query) throws SQLException, SQLIntegrityConstraintViolationException {
+    private static int executeSQLStatement(String query) throws SQLException {
             Statement statement = conn.createStatement();
             return statement.executeUpdate(query);
     }
@@ -185,20 +180,6 @@ public class SQLServerHandler {
         return getRoleDataContainers(query);
     }
 
-    public static RoleDataContainer getRoleById(String id) throws  SQLException{
-        String query = "SELECT * " +
-                "FROM Role " +
-                " WHERE Role.ID = " + id;
-        ResultSet rs = createResultSet(query);
-        int columnCount = getColumnCountFromResultSet(rs);
-        rs.next();
-        StringBuilder row = new StringBuilder();
-        for (int i = 1; i <= columnCount; i++) {
-            row.append(rs.getString(i)).append(", ");
-        }//end of for
-        closeDBConnection();
-        return new RoleDataContainer(row.toString());
-    }
 
     public static String getRoleIDbyRoleName(String name)throws SQLException {
         String query = "SELECT RoleID " +
@@ -225,7 +206,7 @@ public class SQLServerHandler {
         RoleDataContainer roleDataContainer = new RoleDataContainer();
         ResultSet rs = createResultSet(query);
         int columnCount = getColumnCountFromResultSet(rs);
-        while (rs.next()) { //TODO: See if nescarry to function with the rs.next()
+        while (rs.next()) {
             StringBuilder row = new StringBuilder();
             for (int i = 1; i <= columnCount; i++) {
                 row.append(rs.getString(i)).append(", ");
@@ -234,8 +215,4 @@ public class SQLServerHandler {
         }
         return  roleDataContainer;
     }
-
-    //////////////////////////
-    //MemberHasRole Queries
-    /////////////////////////
 }

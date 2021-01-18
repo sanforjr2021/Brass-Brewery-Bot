@@ -5,6 +5,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import sanford.data.ConfigHandler;
 import sanford.data.SQLServerHandler;
 import sanford.task.TaskController;
@@ -25,6 +28,9 @@ public class BrassBreweryBot {
 
     public BrassBreweryBot() throws LoginException {
         jda = JDABuilder.createDefault(configHandler.getProperty("token"))
+                //Note: Chunk filter idea from https://stackoverflow.com/questions/61226721/discord-jda-invalid-member-list
+                .setChunkingFilter(ChunkingFilter.include(Long.parseLong(configHandler.getProperty("serverID")))) // enable member chunking for all guilds
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .addEventListeners(new MessageListener())
                 .addEventListeners(new ReadyListener())
                 .build();
