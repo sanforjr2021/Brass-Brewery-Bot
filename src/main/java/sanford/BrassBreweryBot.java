@@ -63,7 +63,7 @@ public class BrassBreweryBot {
                 configHandler.getProperty("database"),
                 configHandler.getProperty("username"),
                 configHandler.getProperty("password")
-        )
+        );
 
         //Inform Pterodactyl the bot is running
         System.out.println("Startup Complete!");
