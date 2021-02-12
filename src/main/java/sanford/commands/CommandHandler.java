@@ -29,6 +29,10 @@ public class CommandHandler extends Command {
                 case "!rankup":
                     new RankUp(getMessage());
                     break;
+                case "!help":
+                    System.out.println("I typed help");
+                    new Help(getMessage());
+                    break;
             }//end of switch
         }//end of else
 }   //end of executeCommand

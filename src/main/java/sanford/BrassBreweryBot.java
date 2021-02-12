@@ -57,14 +57,13 @@ public class BrassBreweryBot {
     //on startup
     public static void onStartupComplete() {
         guild = jda.getGuildById(configHandler.getProperty("serverID"));
-        verifyChannel = guild.getTextChannelById("737105063948058664"); //TODO:Replace from config or Database
         afkChannel = guild.getAfkChannel();
         new SQLServerHandler(
                 configHandler.getProperty("host"),
                 configHandler.getProperty("database"),
                 configHandler.getProperty("username"),
                 configHandler.getProperty("password")
-        );
+        )
 
         //Inform Pterodactyl the bot is running
         System.out.println("Startup Complete!");
@@ -75,11 +74,7 @@ public class BrassBreweryBot {
         BrassBreweryBot brassBreweryBot = new BrassBreweryBot();
     }
 
-    //Getters
-    public static MessageChannel getVerifyChannel() {
-        return verifyChannel;
-    }
-
+    //Getter
     public static Guild getGuild() {
         return guild;
     }

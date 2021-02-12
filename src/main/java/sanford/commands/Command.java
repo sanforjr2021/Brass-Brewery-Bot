@@ -12,11 +12,11 @@ import sanford.BrassBreweryBot;
 
 public abstract class Command {
     private static final Logger logger = LoggerFactory.getLogger("Command Logger");
-    private final User user;
-    private final MessageChannel channel;
-    private final Member member;
-    private final String[] arguments;
-    private final Message message;
+    protected final User user;
+    protected final MessageChannel channel;
+    protected final Member member;
+    protected final String[] arguments;
+    protected final Message message;
 
     public Command(Message msg) {
         message = msg;

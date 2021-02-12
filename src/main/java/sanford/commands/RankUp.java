@@ -49,15 +49,17 @@ public class RankUp extends Command{
     private RoleDataContainer getNextRoleRankID() throws SQLException {
         roles = SQLServerHandler.getRolesForRankUp();
         int highestTier = 1;
-        if(! getMember().getRoles().isEmpty()){
-            for(Role role : getMember().getRoles()){
-                for(RoleDataContainer roleDataContainer : roles){
-                    if(role.getId().equals(roleDataContainer.getId())){
+        try{ //if has no roles
+            for(Role role : getMember().getRoles()) {
+                for (RoleDataContainer roleDataContainer : roles) {
+                    if (role.getId().equals(roleDataContainer.getId())) {
                         highestTier++;
                     }
                 }
             }
-        }
+        }catch (NullPointerException e){
+            //catch for if roles is empty
+            }
         return SQLServerHandler.getRoleByTier(highestTier);
     }
 }
