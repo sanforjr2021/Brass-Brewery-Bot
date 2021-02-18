@@ -17,6 +17,8 @@ public abstract class Command {
     protected final Member member;
     protected final String[] arguments;
     protected final Message message;
+    protected final JDA jda;
+    protected final String mention;
 
     public Command(Message msg) {
         message = msg;
@@ -24,44 +26,32 @@ public abstract class Command {
         channel = msg.getChannel();
         member = BrassBreweryBot.getGuild().getMember(user);
         arguments = msg.getContentRaw().toLowerCase().split(" ");
+        jda = msg.getJDA();
+        mention = user.getAsMention();
         executeCommand();
     }
 
     public abstract void executeCommand();
 
-    public User getUser() {
-        return user;
-    }
-
-    public MessageChannel getChannel() {
-        return channel;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
     public String getArguments(int value) {
-        try{
+        try {
             return arguments[value];
-        }
-        catch( ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             return "INVALID";
         }
-
     }
 
-    public Message getMessage() {
-        return message;
+    public void sendMessage(String messageString) {
+        channel.sendMessage(messageString).queue();
     }
 
-    public JDA getJda() {
-        return message.getJDA();
-    }
-
-    public User getUserByID(String id){
-        RestAction<User> userRestAction = getMessage().getJDA().retrieveUserById(Long.parseLong(id));
+    public User getUserByID(String id) {
+        RestAction<User> userRestAction = jda.retrieveUserById(Long.parseLong(id));
         return userRestAction.complete();
+    }
+
+    public void addReaction(String reactionID) {
+        message.addReaction(reactionID).queue();
     }
 
     public void logError(String error) {

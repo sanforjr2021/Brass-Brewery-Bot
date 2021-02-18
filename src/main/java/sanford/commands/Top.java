@@ -18,25 +18,22 @@ public class Top extends Command {
         try {
             ArrayList<MemberDataContainer> memberDataContainers = SQLServerHandler.getTop10Members();
             StringBuilder solution = new StringBuilder();
-            solution.append(getUser().getAsMention() + "\n```");
+            solution.append(mention).append("```");
             for (int i = 0; i < memberDataContainers.size(); i++) {
-                solution.append(i+ 1 +". ");
+                solution.append(i + 1 + ". ");
                 MemberDataContainer memberDataContainer = memberDataContainers.get(i);
                 User user = getUserByID(memberDataContainer.getId());
                 solution.append(user.getAsTag());
-                if(i <= 8){
-                    for(int x = 0; x < 50-user.getAsTag().length(); x++){
-                        solution.append(" ");
-                    }
+                if (i <= 8) {
+                    String spacer = " ".repeat(50 - user.getAsTag().length());
+                    solution.append(spacer);
+                } else { //must remove 1 space as 10 is 2 chars instead of 1.
+                    String spacer = " ".repeat(49 - user.getAsTag().length());
+                    solution.append(spacer);
                 }
-                else { //must remove 1 space as 10 is 2 chars instead of 1.
-                    for (int x = 0; x < 49 - user.getAsTag().length(); x++) {
-                        solution.append(" ");
-                    }
-                }
-                solution.append(memberDataContainer.getCurrency() + " Points\n");
+                solution.append(memberDataContainer.getCurrency()).append(" Points\n");
             }
-            getChannel().sendMessage(solution.toString() + "```").queue();
+            sendMessage(solution.toString() + "```");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

@@ -6,22 +6,22 @@ import sanford.data.SQLServerHandler;
 
 import java.sql.SQLException;
 
-public class Points extends Command{
+public class Points extends Command {
     public Points(Message msg) {
         super(msg);
     }
 
     @Override
-    public void executeCommand(){
-        String id = getUser().getId();
+    public void executeCommand() {
+        String id = user.getId();
         MemberDataContainer memberDataContainer;
         try {
             memberDataContainer = SQLServerHandler.getMemberDataContainer(id);
-            getChannel().sendMessage(getUser().getAsMention() + " has a value of " + memberDataContainer.getCurrency() + " points.").queue();
+            sendMessage(user.getAsMention() + " has a value of " + memberDataContainer.getCurrency() + " points.");
         } catch (SQLException throwables) {
             logError("Could not connect to database.");
             throwables.printStackTrace();
-            getChannel().sendMessage(getUser().getAsMention() + " Sorry, I could not retrieve your data from the database").queue();
+            sendMessage(user.getAsMention() + " Sorry, I could not retrieve your data from the database");
         }
 
     }

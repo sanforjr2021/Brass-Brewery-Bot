@@ -18,7 +18,7 @@ public class Role extends Command {
     @Override
     public void executeCommand() {
         String argument = getArguments(1).trim();
-        if (argument == "INVALID" || argument.equals("help")) {
+        if (argument.equals("INVALID") || argument.equals("help")) {
             helpArgument();
         } else {
             try {
@@ -39,59 +39,54 @@ public class Role extends Command {
         StringBuilder solution = new StringBuilder();
         solution.append("**Server Roles**\n```");
         for (RoleDataContainer roleDataContainer : roleDataContainersList) {
-            if(roleDataContainer.getTier() == -1)
-                solution.append(roleDataContainer.shopString() + "\n");
-            }
+            if (roleDataContainer.getTier() == -1)
+                solution.append(roleDataContainer.shopString()).append("\n");
+        }
         return solution.toString() + "```";
     }
 
     private void helpArgument() {
         try {
-            getChannel().sendMessage(new StringBuilder()
-                    .append(getUser().getAsMention())
-                    .append("The !role command is used to add roles to a user.")
-                    .append(" Type !role <roleName> to add it to your account. Here's a list of roles.\n")
-                    .append(generateListOfRoles()).toString())
-                    .queue();
+            String helpString = mention + "The !role command is used to add roles to a user. Type !role <roleName> " +
+                    "to add it to your account. Here's a list of roles.\n" + generateListOfRoles();
+            sendMessage(helpString);
         } catch (SQLException throwables) {
             logError("Failed to receive list of roles from the database.");
             throwables.printStackTrace();
         }
-        getMessage().addReaction(" U+2753").queue(); //? Emoji
+        addReaction(" U+2753"); //? Emoji
     }
 
     private void invalidArgument() {
         try {
-            getChannel().sendMessage(new StringBuilder()
-                    .append(getUser().getAsMention())
-                    .append("You failed to specify a specific role,")
-                    .append(" here's a list of roles.\n")
-                    .append(generateListOfRoles()).toString())
-                    .queue();
+            String badArgumentString = mention + "You failed to specify a specific role," +
+                    " here's a list of roles.\n" + generateListOfRoles();
+            sendMessage(badArgumentString);
         } catch (SQLException throwables) {
             logError("Failed to receive list of roles from the database.");
             throwables.printStackTrace();
         }
-        getMessage().addReaction("U+274C").queue(); //Red X Emoji
+        addReaction("U+274C"); //Red X Emoji
     }
-    private void sendMessageWithReaction(String message, String reaction){
-        getChannel().sendMessage(message).queue();
-        getMessage().addReaction(reaction).queue(); //Check Mark
-    }
+
     private void addRoleToUser(String roleID) {
-        if (Util.hasRole(getMember(), roleID)) {
-            if (Util.removeRole(getMember(), roleID)) {
-                sendMessageWithReaction(getUser().getAsMention() + "I removed the role from you.","U+2705" );
+        if (Util.hasRole(member, roleID)) {
+            if (Util.removeRole(member, roleID)) {
+                sendMessage(mention + "I removed the role from you.");
+                addReaction("U+2705"); //Green Checkmark Emoji
             } else {
-                sendMessageWithReaction(getUser().getAsMention() + " I failed to remove the role to you. Please contact " +
-                        "a staff member if this continues to occur.","U+274C");
+                sendMessage(mention + " I failed to remove the role to you. Please contact " +
+                        "a staff member if this continues to occur.");
+                addReaction("U+274C");//Red X emoji
             }
         } else {
-            if (Util.addRole(getMember(), roleID)) {
-                sendMessageWithReaction(getUser().getAsMention() + " You have been added the role.","U+2705");
+            if (Util.addRole(member, roleID)) {
+                sendMessage(mention + " You have been added the role.");
+                addReaction("U+2705"); //Green Checkmark Emoji
             } else {
-                sendMessageWithReaction(getUser().getAsMention() + " I failed to remove the role to you. Please contact " +
-                        "a staff member if this continues to occur.","U+274C");
+                sendMessage(mention + " I failed to remove the role to you. Please contact " +
+                        "a staff member if this continues to occur.");
+                addReaction("U+274C"); //Red X emoji
             }
         }
     }

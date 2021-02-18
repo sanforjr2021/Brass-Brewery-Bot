@@ -1,8 +1,6 @@
 package sanford.commands;
 
 import net.dv8tion.jda.api.entities.Message;
-import sanford.BrassBreweryBot;
-import sanford.util.Util;
 
 public class CommandHandler extends Command {
 
@@ -12,28 +10,27 @@ public class CommandHandler extends Command {
 
     @Override
     public void executeCommand() {
-        if (getMessage().getContentRaw().startsWith("!")) {
+        if (message.getContentRaw().startsWith("!")) {
             switch (getArguments(0)) {
                 case "!ping":
-                    new Ping(getMessage());
+                    new Ping(message);
                     break;
                 case "!role":
-                    new Role(getMessage());
+                    new Role(message);
                     break;
                 case "!points":
-                    new Points(getMessage());
+                    new Points(message);
                     break;
                 case "!top":
-                    new Top(getMessage());
+                    new Top(message);
                     break;
                 case "!rankup":
-                    new RankUp(getMessage());
+                    new RankUp(message);
                     break;
                 case "!help":
-                    System.out.println("I typed help");
-                    new Help(getMessage());
+                    new Help(message);
                     break;
             }//end of switch
         }//end of else
-}   //end of executeCommand
+    }   //end of executeCommand
 }//end of Command handler
