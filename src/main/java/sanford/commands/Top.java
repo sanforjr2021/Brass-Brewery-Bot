@@ -20,7 +20,7 @@ public class Top extends Command {
             StringBuilder solution = new StringBuilder();
             solution.append(mention).append("```");
             for (int i = 0; i < memberDataContainers.size(); i++) {
-                solution.append(i + 1 + ". ");
+                solution.append((i + 1)).append(". ");
                 MemberDataContainer memberDataContainer = memberDataContainers.get(i);
                 User user = getUserByID(memberDataContainer.getId());
                 solution.append(user.getAsTag());
@@ -37,6 +37,10 @@ public class Top extends Command {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
+    }
+    public static String getHelpString() {
+        String helpString = "`!Top`";
+        helpString += " - *Returns the top 10 highest point individuals.*";
+        return helpString;
     }
 }

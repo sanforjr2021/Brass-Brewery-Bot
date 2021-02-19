@@ -17,4 +17,9 @@ public class Ping extends Command {
                         System.currentTimeMillis() - message.getTimeCreated().toInstant().toEpochMilli()).queue());
         message.getTimeCreated();
     }
+    public static String getHelpString(){
+        String helpString = "`!Ping`";
+        helpString += " - *Pings the host device.*";
+        return helpString;
+    }
 }

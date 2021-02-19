@@ -90,6 +90,10 @@ public class Role extends Command {
             }
         }
     }
-
+    public static String getHelpString() {
+        String helpString = "`!Role <role name>`";
+        helpString += " - *Adds or removes a game role to allow you access to the designated table.*";
+        return helpString;
+    }
 
 }

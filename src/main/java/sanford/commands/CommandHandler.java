@@ -2,18 +2,12 @@ package sanford.commands;
 
 import net.dv8tion.jda.api.entities.Message;
 
-import java.util.concurrent.TimeUnit;
+public class CommandHandler {
 
-public class CommandHandler extends Command {
-
-    public CommandHandler(Message msg) {
-        super(msg);
-    }
-
-    @Override
-    public void executeCommand() {
+    public CommandHandler(Message message) {
         if (message.getContentRaw().startsWith("!")) {
-            switch (getArguments(0)) {
+            String[] arguments = message.getContentRaw().split(" ");
+            switch (arguments[0]) {
                 case "!ping":
                     new Ping(message);
                     break;
@@ -33,16 +27,15 @@ public class CommandHandler extends Command {
                     new Help(message);
                     break;
                 case "!invite":
-                    //TODO: make into a class and stop the link from being hardcoded
-                    sendMessage(mention + "\nFeel free to invite your friend's: https://discord.gg/sDmd8v2");
+                    new Invite(message);
                     break;
                 case "!d":
                     new DBump(message);
                     break;
                 case "!source":
-                    sendMessage("Here's my sourcecode: https://github.com/sanforjr2021/BBBot");
+                    new Source(message);
                     break;
             }//end of switch
         }//end of else
-    }   //end of executeCommand
+    }
 }//end of Command handler
