@@ -9,7 +9,7 @@ public class Source extends Command{
 
     @Override
     public void executeCommand() {
-        sendMessage(mention + "\nFeel free to invite your friend's: https://discord.gg/sDmd8v2");
+        sendMessage(mention + "Here's my sourcecode: https://github.com/sanforjr2021/BBBot");
     }
 
     public static String getHelpString() {

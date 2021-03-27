@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import sanford.BrassBreweryBot;
 
-import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 public class DBump extends Command{
@@ -30,7 +29,7 @@ public class DBump extends Command{
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(embeddedColor);
         embedBuilder.setTitle("Rate Us on Disboard", "https://disboard.org/server/654574172999254016");
-        embedBuilder.setDescription("Thanks " + mention + " for bumping our server! If you want to help promote our server more, please consider rating us.");
+        embedBuilder.setDescription("Thanks " + mention + " for bumping our server! If you want to help promote our server more, please consider rating us. https://disboard.org/server/654574172999254016");
         embedBuilder.setThumbnail(BrassBreweryBot.getGuild().getIconUrl());
         return embedBuilder;
     }
