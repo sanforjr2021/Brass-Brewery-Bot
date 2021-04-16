@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class RewardTextPoints extends TimerTask {
+public class RewardTextPointsTask extends TimerTask {
     private static ArrayList<String> usersIds;
     private static final Logger logger = LoggerFactory.getLogger("Task Log");
 
-    public RewardTextPoints() {
+    public RewardTextPointsTask() {
         usersIds = new ArrayList<String>();
     }
 

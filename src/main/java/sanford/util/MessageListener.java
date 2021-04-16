@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import sanford.commands.CommandHandler;
-import sanford.task.RewardTextPoints;
+import sanford.task.RewardTextPointsTask;
 
 
 public class MessageListener extends ListenerAdapter {
@@ -21,7 +21,7 @@ public class MessageListener extends ListenerAdapter {
                     event.getMessage().getContentDisplay());
         }
         if (!msg.getAuthor().isBot()) {
-            RewardTextPoints.addUser(msg.getAuthor().getId());
+            RewardTextPointsTask.addUser(msg.getAuthor().getId());
             new CommandHandler(msg);
         }
     }

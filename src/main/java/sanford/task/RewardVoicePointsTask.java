@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-public class RewardVoicePoints extends TimerTask {
+public class RewardVoicePointsTask extends TimerTask {
     private static final Logger logger = LoggerFactory.getLogger("Task Log");
     @Override
     public void run() {

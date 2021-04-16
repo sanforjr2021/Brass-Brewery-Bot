@@ -20,7 +20,6 @@ public class BrassBreweryBot {
 
     private static JDA jda;
     private static Guild guild;
-    private static MessageChannel verifyChannel;
     private static VoiceChannel afkChannel;
     private static ConfigHandler configHandler = new ConfigHandler();
     private static TaskController taskController = new TaskController();
@@ -77,6 +76,10 @@ public class BrassBreweryBot {
     //Getter
     public static Guild getGuild() {
         return guild;
+    }
+
+    public static JDA getJDA(){
+        return jda;
     }
 
     public static VoiceChannel getAFKChannel() {

@@ -37,7 +37,7 @@ public class Role extends Command {
     private String generateListOfRoles() throws SQLException {
         ArrayList<RoleDataContainer> roleDataContainersList = SQLServerHandler.getRoles();
         StringBuilder solution = new StringBuilder();
-        solution.append("**Server Roles**\n```");
+        solution.append("**Server Roles**\n```\n");
         for (RoleDataContainer roleDataContainer : roleDataContainersList) {
             if (roleDataContainer.getTier() == -1)
                 solution.append(roleDataContainer.shopString()).append("\n");
