@@ -1,23 +1,23 @@
 package sanford.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import sanford.BrassBreweryBot;
 import sanford.data.MemberDataContainer;
-import sanford.data.RoleDataContainer;
+import sanford.data.RankDataContainer;
 import sanford.data.SQLServerHandler;
 import sanford.util.Util;
 
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import static sanford.data.SQLServerHandler.getRanks;
+import static sanford.data.SQLServerHandler.updateMembersCurrency;
 
 public class RankUp extends Command {
-    private ArrayList<RoleDataContainer> roles;
-    private RoleDataContainer nextRole;
-    private String output;
-    private boolean addedRole = false;
     public RankUp(Message msg) {
         super(msg);
     }
@@ -30,37 +30,83 @@ public class RankUp extends Command {
 
     @Override
     public void executeCommand() {
-        attemptAddingRole();
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        if(addedRole){
-            embedBuilder.setColor(Color.green);
-            embedBuilder.setTitle("Congratulations " + user.getName() + "!");
+        RankDataContainer nextRank = findNextRank();
+        MemberDataContainer user;
+        if (nextRank == null){ //if can't get rank
+            return;
+        }
+        try {
+            user = SQLServerHandler.getMemberDataContainer(member.getId());
+        } catch (SQLException throwables) {
+            buildErrorEmbedded();
+            return;
+        }
+        if(user.getCurrency() >= nextRank.getCost()){
+            try {
+                if(Util.addRole(member, nextRank.getId())){
+                    updateMembersCurrency(user);
+                    user.setCurrency(user.getCurrency()-nextRank.getCost());
+                    sendMessage(
+                            buildEmbeddedMessage(
+                                    true,
+                                    " received the rank ***" + nextRank.getName() + "*** at " +
+                            "the cost of ***" + nextRank.getCost() + ".***"
+                            ));
+                }
+                else{
+                    buildErrorEmbedded();
+                }
+            } catch (SQLException throwables) {
+                buildErrorEmbedded();
+            }
         }
         else{
+            int moneyNeeded = nextRank.getCost() - user.getCurrency();
+            sendMessage(
+                    buildEmbeddedMessage(
+                            false,
+                            " could not afford the rank ***" + nextRank.getName() +
+                    "***. You still need ***" + moneyNeeded + " points***, to have the total cost of ***"
+                    + nextRank.getCost() + " points***."
+                    ));
+        }
+    }
+
+    private EmbedBuilder buildEmbeddedMessage(boolean addedRole, String output) {
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        if (addedRole) {
+            embedBuilder.setColor(Color.green);
+            embedBuilder.setTitle("Congratulations " + user.getName() + "!");
+        } else {
             embedBuilder.setColor(Color.red);
             embedBuilder.setTitle("Sorry  " + user.getName() + "!");
         }
         embedBuilder.setDescription(mention + " " + output);
         embedBuilder.setThumbnail(user.getAvatarUrl());
-        sendMessage(embedBuilder);
+        return embedBuilder;
     }
 
-    private RoleDataContainer getNextRoleRankID() throws SQLException {
-        roles = SQLServerHandler.getRolesForRankUp();
-        int highestTier = 1;
-        try { //if has no roles
-            for (Role role : member.getRoles()) {
-                for (RoleDataContainer roleDataContainer : roles) {
-                    if (role.getId().equals(roleDataContainer.getId())) {
-                        highestTier++;
+    private RankDataContainer findNextRank() {
+        try {
+            ArrayList<RankDataContainer> ranks = getRanks();
+            List<Role> rolesList = member.getRoles();
+            int rankIndex = 0;
+            for (RankDataContainer container : ranks) {
+                for (Role role : rolesList) {
+                    if (role.getId().equals(container.getId())) {
+                        rankIndex++;
                     }
                 }
             }
-        } catch (NullPointerException e) {
-            //catch for if roles is empty
+
+            return ranks.get(rankIndex);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            buildErrorEmbedded();
+            return null;
         }
-        return SQLServerHandler.getRoleByTier(highestTier);
     }
+    /*
     private void attemptAddingRole(){
         try {
             nextRole = getNextRoleRankID();
@@ -90,4 +136,5 @@ public class RankUp extends Command {
             output = "I cannot rank you up at this time.";
         }
     }
+     */
 }

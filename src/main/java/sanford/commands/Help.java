@@ -11,7 +11,6 @@ public class Help extends Command {
 
     public Help(Message msg) {
         super(msg);
-
     }
 
     @Override
@@ -60,6 +59,7 @@ public class Help extends Command {
         list.add(Role.getHelpString());
         list.add(Source.getHelpString());
         list.add(Top.getHelpString());
+        list.add(Rank.getHelpString());
         return list;
     }
 }

@@ -165,6 +165,23 @@ public class SQLServerHandler {
     //Role Queries
     ///////////////////////
 
+    public static ArrayList<RankDataContainer> getRanks() throws SQLException{
+        String query = "SELECT * FROM Ranks ORDER BY Ranks.Tier ASC";
+        openDBConnection();
+        PreparedStatement statement = conn.prepareStatement(query);
+        ResultSet results = statement.executeQuery();
+        int columnCount = getColumnCountFromResultSet(results);
+        ArrayList<RankDataContainer> rankList = new ArrayList<RankDataContainer>(7);
+        while (results.next()){
+            StringBuilder row = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                row.append(results.getString(i)).append(", ");
+            }//end of for
+             rankList.add(new RankDataContainer(row.toString()));
+        }
+        return rankList;
+    }
+
     public static ArrayList<RoleDataContainer> getRoles() throws SQLException {
         String query = "SELECT * \n" +
                             "FROM Role "+

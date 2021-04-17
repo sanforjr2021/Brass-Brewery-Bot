@@ -35,6 +35,9 @@ public class CommandHandler {
                 case "!source":
                     new Source(message);
                     break;
+                case "!rank":
+                    new Rank(message);
+                    break;
             }//end of switch
         }//end of else
     }

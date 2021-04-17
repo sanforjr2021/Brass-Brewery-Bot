@@ -31,7 +31,7 @@ public class MemberDataContainer {
 
     public void setCurrency(int currency) {
         this.currency = currency;
-        System.out.println("Currency set to " + this.currency);
+        System.out.println(id + "'s currency set to " + this.currency);
     }
 
     public String toString() {

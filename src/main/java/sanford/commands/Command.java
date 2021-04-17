@@ -61,6 +61,16 @@ public abstract class Command {
         return userRestAction.complete();
     }
 
+
+    public  EmbedBuilder buildErrorEmbedded(){
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setColor(Color.red);
+        embedBuilder.setTitle("An Error occured at the time.");
+        embedBuilder.setDescription("I am sorry, I cannot perform this action at this time,\n" +
+                "try again later or inform a bouncer of this to help.");
+        return embedBuilder;
+    }
+
     public void addReaction(String reactionID) {
         message.addReaction(reactionID).queue();
     }

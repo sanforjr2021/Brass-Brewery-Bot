@@ -6,17 +6,16 @@ import sanford.BrassBreweryBot;
 
 import java.util.TimerTask;
 
-public class UpdateBotStatusTask extends TimerTask {
+public class UpdateBotStatusTask  extends TimerTask {
 
 
-    public UpdateBotStatusTask() {
-    }
+    public UpdateBotStatusTask(){}
 
     @Override
     public void run() {
         JDA jda = BrassBreweryBot.getJDA();
         int numOfUsers = jda.getUsers().size();
-        jda.getPresence().setActivity(Activity.playing("Servering " + numOfUsers + " of users"));
+        jda.getPresence().setActivity(Activity.playing("Serving " + numOfUsers + " locals"));
 
     }
 }
