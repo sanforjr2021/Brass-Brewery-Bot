@@ -36,7 +36,10 @@ public class ConfigController {
                     "host = localhost\n" +
                     "database= null\n" +
                     "username= user\n" +
-                    "password= password\n");
+                    "password= password\n" +
+                    "token= tokenHere\n"+
+                    "auditChannelId= 00000000000000000\n"
+            );
             writer.close();
             //Force exit because default config values will not work for the Bot
             System.out.println("Please update your config.properties. Bot is shutting down");
