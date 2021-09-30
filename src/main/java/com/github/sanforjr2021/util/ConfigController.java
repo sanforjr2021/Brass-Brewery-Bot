@@ -33,12 +33,17 @@ public class ConfigController {
             FileWriter writer = new FileWriter(file);
             //NOTE: will delete previous config values and keys, even if they were not a duplicate
             writer.write("version= " + BrassBreweryBot.VERSION + "\n" +
+                    "//Database\n" +
                     "host = localhost\n" +
                     "database= null\n" +
                     "username= user\n" +
                     "password= password\n" +
+                    "//Bot Info\n" +
                     "token= tokenHere\n"+
-                    "auditChannelId= 00000000000000000\n"
+                    "guildId= GuildIdHere\n"+
+                    "auditChannelId= channelIdHere\n"+
+                    "commandChannelId= channelIdHere\n"+
+                    "musicChannelId= channelIdHere"
             );
             writer.close();
             //Force exit because default config values will not work for the Bot

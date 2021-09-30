@@ -1,23 +1,67 @@
 package com.github.sanforjr2021;
 
-import com.github.sanforjr2021.bot.D4JBot;
+import com.github.sanforjr2021.bot.OnBotReady;
 import com.github.sanforjr2021.dao.DaoController;
 import com.github.sanforjr2021.util.ConfigController;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 
-import java.util.Properties;
+import javax.security.auth.login.LoginException;
 
 public class BrassBreweryBot {
+    public static final String VERSION = "2.0.3";
 
-    public static final String VERSION = "2.0.1";
-    public static D4JBot bot;
-    public static void main(String args[]){
-        ConfigController configController = new ConfigController();
-        new DaoController(configController.getProperty("host"),
-                configController.getProperty("database"),
-                configController.getProperty("username"),
-                configController.getProperty("password"));
-        bot = new D4JBot(configController.getProperty("token"), configController.getProperty("auditChannelId"));
-        bot.onShutdown();
+    public static final ConfigController CONFIG_CONTROLLER = new ConfigController();
+    public static JDA DISCORD_BOT;
+    public static Guild GUILD;
+    public static TextChannel AUDIT_CHANNEL;
+    public static TextChannel COMMAND_CHANNEL;
+    public static TextChannel MUSIC_CHANNEL;
+
+    public BrassBreweryBot() {
+        System.out.println("Startup: Starting bot");
+        System.out.println("Startup: Brass Brewery Bot (V" + BrassBreweryBot.VERSION + ") is started.");
+        prepareDatabaseConnection();
+        launchBot();
+        DISCORD_BOT.addEventListener(new OnBotReady());
+
+
+    }
+
+    public static void main(String[] args) {
+        new BrassBreweryBot();
+
+    }
+
+    public void prepareDatabaseConnection() {
+        System.out.println("Startup: Preparing Database Connection");
+        new DaoController(
+                CONFIG_CONTROLLER.getProperty("host"),
+                CONFIG_CONTROLLER.getProperty("database"),
+                CONFIG_CONTROLLER.getProperty("username"),
+                CONFIG_CONTROLLER.getProperty("password"));
+    }
+
+    public void launchBot() {
+        try {
+            Long guildId= Long.parseLong(CONFIG_CONTROLLER.getProperty("guildId"));
+            DISCORD_BOT = JDABuilder.createDefault(CONFIG_CONTROLLER.getProperty("token"))
+                    .setChunkingFilter(ChunkingFilter.include(guildId))
+                    .enableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+                    .build();
+            System.out.println("Startup: JDA Launched");
+        } catch (LoginException e) {
+            System.err.println("Startup: Could not activate bot.");
+            e.printStackTrace();
+            System.out.println("Startup: Shutting Down");
+            System.exit(0);
+        }
+        //define static values
 
     }
 }
