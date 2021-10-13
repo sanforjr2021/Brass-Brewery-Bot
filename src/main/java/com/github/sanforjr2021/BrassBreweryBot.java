@@ -1,13 +1,13 @@
 package com.github.sanforjr2021;
 
 import com.github.sanforjr2021.bot.OnBotReady;
+import com.github.sanforjr2021.bot.command.SlashCommandHandler;
 import com.github.sanforjr2021.dao.DaoController;
 import com.github.sanforjr2021.util.ConfigController;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 
@@ -26,10 +26,9 @@ public class BrassBreweryBot {
     public BrassBreweryBot() {
         System.out.println("Startup: Starting bot");
         System.out.println("Startup: Brass Brewery Bot (V" + BrassBreweryBot.VERSION + ") is started.");
-        prepareDatabaseConnection();
+            prepareDatabaseConnection();
         launchBot();
         DISCORD_BOT.addEventListener(new OnBotReady());
-
 
     }
 
@@ -49,14 +48,14 @@ public class BrassBreweryBot {
 
     public void launchBot() {
         try {
-            Long guildId= Long.parseLong(CONFIG_CONTROLLER.getProperty("guildId"));
+            Long guildId = Long.parseLong(CONFIG_CONTROLLER.getProperty("guildId"));
             DISCORD_BOT = JDABuilder.createDefault(CONFIG_CONTROLLER.getProperty("token"))
                     .setChunkingFilter(ChunkingFilter.include(guildId))
                     .enableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
                     .build();
             System.out.println("Startup: JDA Launched");
         } catch (LoginException e) {
-            System.err.println("Startup: Could not activate bot.");
+            System.err.println("Startup: Could not activate bot");
             e.printStackTrace();
             System.out.println("Startup: Shutting Down");
             System.exit(0);
