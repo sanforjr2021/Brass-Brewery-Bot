@@ -1,7 +1,6 @@
 package com.github.sanforjr2021;
 
 import com.github.sanforjr2021.bot.OnBotReady;
-import com.github.sanforjr2021.bot.command.SlashCommandHandler;
 import com.github.sanforjr2021.dao.DaoController;
 import com.github.sanforjr2021.util.ConfigController;
 import net.dv8tion.jda.api.JDA;

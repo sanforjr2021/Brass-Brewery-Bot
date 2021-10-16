@@ -3,6 +3,7 @@ package com.github.sanforjr2021.bot.command;
 import com.github.sanforjr2021.dao.GuildMemberDao;
 import com.github.sanforjr2021.domain.GuildMember;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.sql.SQLException;
 
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
+import static com.github.sanforjr2021.service.CurrencyService.getPoints;
 
 public class Points extends Command {
 
@@ -21,31 +23,30 @@ public class Points extends Command {
 
     @Override
     public void executeCommand(SlashCommandEvent event) {
-        Member member;
+        User user;
         OptionMapping mapping = event.getOption("user");
         try {
-            member = GUILD.getMember(mapping.getAsUser());
-            event.reply(getOtherPoints(member)).queue();
+            user = mapping.getAsUser();
+            event.reply(getOtherPoints(user)).queue();
         } catch (NullPointerException e) {
-            member = event.getMember();
-            event.reply(getSelfPoints(member)).queue();
+             user = event.getUser();
+            event.reply(getSelfPoints(user)).queue();
         }
     }
 
-    private String getSelfPoints(Member member) {
+    private String getSelfPoints(User user) {
         try {
-            GuildMember guildMember = GuildMemberDao.get(member.getId());
-            return "You have " + guildMember.getCurrency() + " points.";
+            return "You have " + getPoints(user) + " points.";
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return "Could not get your points at this time.";
         }
     }
 
-    private String getOtherPoints(Member member) {
+    private String getOtherPoints(User user) {
+        Member member = GUILD.getMember(user);
         try {
-            GuildMember guildMember = GuildMemberDao.get(member.getUser().getId());
-            return member.getEffectiveName() + " has " + guildMember.getCurrency() + " points.";
+            return member.getEffectiveName() + " has " + getPoints(user) + " points.";
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return "Could not get " + member.getEffectiveName() + "'s points at this time.";
