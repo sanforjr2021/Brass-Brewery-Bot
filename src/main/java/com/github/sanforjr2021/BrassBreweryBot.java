@@ -1,7 +1,8 @@
 package com.github.sanforjr2021;
 
-import com.github.sanforjr2021.bot.OnBotReady;
-import com.github.sanforjr2021.dao.DaoController;
+import com.github.sanforjr2021.util.OnBotReady;
+import com.github.sanforjr2021.database.dao.DaoController;
+import com.github.sanforjr2021.task.TaskController;
 import com.github.sanforjr2021.util.ConfigController;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -21,11 +22,11 @@ public class BrassBreweryBot {
     public static TextChannel AUDIT_CHANNEL;
     public static TextChannel COMMAND_CHANNEL;
     public static TextChannel MUSIC_CHANNEL;
+    public static TaskController TASK_CONTROLLER;
 
     public BrassBreweryBot() {
-        System.out.println("Startup: Starting bot");
-        System.out.println("Startup: Brass Brewery Bot (V" + BrassBreweryBot.VERSION + ") is started.");
-            prepareDatabaseConnection();
+        System.out.println("Startup: Brass Brewery Bot (V" + BrassBreweryBot.VERSION + ") is booting up.");
+        prepareDatabaseConnection();
         launchBot();
         DISCORD_BOT.addEventListener(new OnBotReady());
 
@@ -59,7 +60,6 @@ public class BrassBreweryBot {
             System.out.println("Startup: Shutting Down");
             System.exit(0);
         }
-        //define static values
 
     }
 }

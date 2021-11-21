@@ -1,7 +1,8 @@
-package com.github.sanforjr2021.bot;
+package com.github.sanforjr2021.util;
 
 import com.github.sanforjr2021.BrassBreweryBot;
-import com.github.sanforjr2021.bot.command.SlashCommandHandler;
+import com.github.sanforjr2021.commands.SlashCommandHandler;
+import com.github.sanforjr2021.task.TaskController;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
@@ -20,6 +21,8 @@ public class OnBotReady implements EventListener {
             MUSIC_CHANNEL = DISCORD_BOT.getTextChannelById(CONFIG_CONTROLLER.getProperty("musicChannelId"));
             DISCORD_BOT.addEventListener(new SlashCommandHandler());
             AUDIT_CHANNEL.sendMessage("Brass Brewery Bot (V" + BrassBreweryBot.VERSION + ") is started.").queue();
+            DISCORD_BOT.addEventListener(new MessageHandler());
+            TASK_CONTROLLER = new TaskController();
             System.out.println("Startup Complete");
         }
     }

@@ -1,4 +1,4 @@
-package com.github.sanforjr2021.bot.command;
+package com.github.sanforjr2021.commands;
 
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;

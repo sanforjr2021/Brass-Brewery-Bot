@@ -1,10 +1,9 @@
-package com.github.sanforjr2021.bot.command;
+package com.github.sanforjr2021.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -60,16 +59,8 @@ public abstract class Command {
         message.addReaction(reactionID).queue();
     }
 
-    public String getHelpString() {
-        return helpString;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void invalidChannel(SlashCommandEvent event, TextChannel channel) {
-        event.reply("You cannot use this command in this channel. \nTry using this command in " + channel.getAsMention());
     }
 
     public void invalidPermissions(SlashCommandEvent event) {

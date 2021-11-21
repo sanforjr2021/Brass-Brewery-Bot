@@ -1,7 +1,5 @@
-package com.github.sanforjr2021.bot.command;
+package com.github.sanforjr2021.commands;
 
-import com.github.sanforjr2021.dao.GuildMemberDao;
-import com.github.sanforjr2021.domain.GuildMember;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -13,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.sql.SQLException;
 
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
-import static com.github.sanforjr2021.service.CurrencyService.getPoints;
+import static com.github.sanforjr2021.database.service.CurrencyService.getPoints;
 
 public class Points extends Command {
 
