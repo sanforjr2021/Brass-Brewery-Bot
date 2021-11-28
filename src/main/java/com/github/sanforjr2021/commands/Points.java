@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.sql.SQLException;
 
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
-import static com.github.sanforjr2021.database.service.CurrencyService.getPoints;
+import static com.github.sanforjr2021.service.CurrencyService.getPoints;
 
 public class Points extends Command {
 

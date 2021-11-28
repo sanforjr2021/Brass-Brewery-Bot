@@ -11,8 +11,8 @@ import java.awt.*;
 import java.sql.SQLException;
 
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
-import static com.github.sanforjr2021.database.service.CurrencyService.getPoints;
-import static com.github.sanforjr2021.database.service.RoleService.*;
+import static com.github.sanforjr2021.service.CurrencyService.getPoints;
+import static com.github.sanforjr2021.service.RoleService.*;
 
 public class Rankup extends Command {
     public Rankup() {

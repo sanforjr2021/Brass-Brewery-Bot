@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import javax.security.auth.login.LoginException;
 
 public class BrassBreweryBot {
-    public static final String VERSION = "2.0.3";
+    public static final String VERSION = "2.0.4";
 
     public static final ConfigController CONFIG_CONTROLLER = new ConfigController();
     public static JDA DISCORD_BOT;

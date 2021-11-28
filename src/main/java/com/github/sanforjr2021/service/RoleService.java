@@ -1,4 +1,4 @@
-package com.github.sanforjr2021.database.service;
+package com.github.sanforjr2021.service;
 
 import com.github.sanforjr2021.database.dao.GuildMemberDao;
 import com.github.sanforjr2021.database.dao.RankDao;

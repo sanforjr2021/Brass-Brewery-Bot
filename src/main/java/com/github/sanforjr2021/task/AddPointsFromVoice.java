@@ -42,7 +42,7 @@ public class AddPointsFromVoice extends TimerTask {
             logger.info("Added 2 points to a user for being in voice.");
         }
         else if(userIds.size() > 1){
-            logger.info("Added %s points to %s users for being in voice.",  userIds.size()*2, userIds.size());
+            logger.info("Added " + userIds.size()*2 + " points to " + userIds.size() + " users for being in voice.");
         }
 
     }

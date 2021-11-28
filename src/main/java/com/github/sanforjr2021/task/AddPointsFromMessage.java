@@ -21,7 +21,6 @@ public class AddPointsFromMessage extends TimerTask {
 
     public static void addUser(String id) {
         if (!userIds.contains(id)) {
-            System.out.println(id);
             userIds.add(id);
         }
     }
@@ -41,7 +40,7 @@ public class AddPointsFromMessage extends TimerTask {
             logger.info("Added 1 point to a user for sending messages.");
         }
         else if(userIds.size() > 1){
-            logger.info("Added %s points to %s users for sending messages.",  userIds.size(), userIds.size());
+            logger.info("Added " + userIds.size() + " points to " + userIds.size() + " users for sending messages.");
         }
         userIds.clear();
     }
