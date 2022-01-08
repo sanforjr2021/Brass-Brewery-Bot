@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.awt.*;
 import java.sql.SQLException;
 
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
@@ -25,10 +26,10 @@ public class Points extends Command {
         OptionMapping mapping = event.getOption("user");
         try {
             user = mapping.getAsUser();
-            event.reply(getOtherPoints(user)).queue();
+            event.replyEmbeds(buildEmbeddedMessage(user.getName() + "'s Points", getOtherPoints(user), Color.orange, user.getAvatarUrl())).queue();
         } catch (NullPointerException e) {
-             user = event.getUser();
-            event.reply(getSelfPoints(user)).queue();
+            user = event.getUser();
+            event.replyEmbeds(buildEmbeddedMessage(user.getName() + "'s Points", getSelfPoints(user), Color.orange, user.getAvatarUrl())).queue();
         }
     }
 

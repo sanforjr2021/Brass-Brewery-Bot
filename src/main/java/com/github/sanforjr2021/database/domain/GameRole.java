@@ -4,19 +4,19 @@ public class GameRole {
     private String id;
     private String name;
     private String description;
+    private String icon;
+    private String serverURL;
 
-    public GameRole(String id, String name, String description) {
+    public GameRole(String id, String name, String description, String icon, String serverURL) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.icon = icon;
+        this.serverURL = serverURL;
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -31,8 +31,12 @@ public class GameRole {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getIcon() {
+        return icon;
+    }
+
+    public String getServerURL() {
+        return serverURL;
     }
 
     @Override
@@ -41,6 +45,8 @@ public class GameRole {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", icon='" + icon + '\'' +
+                ", serverURL='" + serverURL + '\'' +
                 '}';
     }
 }

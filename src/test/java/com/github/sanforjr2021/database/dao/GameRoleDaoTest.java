@@ -48,26 +48,4 @@ public class GameRoleDaoTest {
             throwables.printStackTrace();
         }
     }
-    @Test
-    public void getGameRoleByAlias(){
-        String alias = "Minecraft";
-        try {
-            GameRole gameRole = GameRoleDao.getByAlias(alias);
-            assert (gameRole.getId().equals("759166621696393237"));
-        } catch (SQLException throwables) {
-            fail("An SQL Error Occured");
-            throwables.printStackTrace();
-        }
-    }
-    @Test
-    public void getNonexistantGameRoleByAlias(){
-        String alias = "NotAnAlias";
-        try {
-            GameRole gameRole = GameRoleDao.getByAlias(alias);
-            assert (gameRole == null);
-        } catch (SQLException throwables) {
-            fail("An SQL Error Occured");
-            throwables.printStackTrace();
-        }
-    }
 }
