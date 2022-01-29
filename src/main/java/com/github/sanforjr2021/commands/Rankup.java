@@ -13,10 +13,12 @@ import java.sql.SQLException;
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
 import static com.github.sanforjr2021.service.CurrencyService.getPoints;
 import static com.github.sanforjr2021.service.RoleService.*;
+import static com.github.sanforjr2021.util.RandomMessageGenerator.getNegativeMessage;
+import static com.github.sanforjr2021.util.RandomMessageGenerator.getPositiveMessage;
 
 public class Rankup extends Command {
     public Rankup() {
-        super("rankup", "ranks the user up to the next valid role if having enough points");
+        super("rankup", "ranks the user up to the next valid role if having enough gold");
     }
 
     @Override
@@ -54,23 +56,25 @@ public class Rankup extends Command {
             if (!userHaveRole(user, rank.getId())) {
                 if (addRank(user, rank)) {
                     event.replyEmbeds(buildEmbeddedMessage(
-                            "Rankup: " + roleName,
+                            "Success: Added Rank" + roleName,
                             mention + " has had the rank " + roleName + " added.",
                             Color.green,
-                            event.getUser().getAvatarUrl())
+                            event.getUser().getAvatarUrl(),
+                            getPositiveMessage())
                     ).queue();
                 } else {
                     event.replyEmbeds(buildEmbeddedMessage(
-                            "Rankup: " + roleName,
-                            mention + " does not have enough points for the rank " + roleName + ".",
+                            "Oops: Could not afford" + roleName,
+                            mention + " does not have enough gold for the rank " + roleName + ".",
                             Color.RED,
-                            event.getUser().getAvatarUrl())
+                            event.getUser().getAvatarUrl(),
+                            getNegativeMessage())
                     ).queue();
                 }
             }
         } catch (SQLException | NullPointerException throwables) {
             event.replyEmbeds(buildEmbeddedMessage(
-                    "Rankup: Error",
+                    "Oops: Error",
                     "I Could not add rank.",
                     Color.RED,
                     event.getUser().getAvatarUrl())
@@ -97,8 +101,8 @@ public class Rankup extends Command {
             if (points >= rank.getCost()) {
                 color = Color.green;
                 descriptionEmbed = user + " can receive the rank of ***" + rankName + "***.\n" +
-                        "It will cost a total of ***" + rank.getCost() + " points***." +
-                        "\nYou currently have a total of ***" + points + "points***. Would you like to rankup?";
+                        "It will cost a total of ***" + rank.getCost() + " gold***." +
+                        "\nYou currently have a total of ***" + points + "gold***. Would you like to rankup?";
             } else {
                 int pointDiff = rank.getCost() - points;
                 descriptionEmbed = "Sorry " + user + ", you cannot afford the rank ***" + rankName + "*** currently." +

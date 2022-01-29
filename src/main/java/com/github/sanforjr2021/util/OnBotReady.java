@@ -1,6 +1,5 @@
 package com.github.sanforjr2021.util;
 
-import com.github.sanforjr2021.BrassBreweryBot;
 import com.github.sanforjr2021.commands.SlashCommandHandler;
 import com.github.sanforjr2021.task.TaskController;
 import net.dv8tion.jda.api.EmbedBuilder;

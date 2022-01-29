@@ -1,6 +1,5 @@
 package com.github.sanforjr2021.task;
 
-import com.github.sanforjr2021.database.dao.DaoController;
 import com.github.sanforjr2021.database.dao.GuildMemberDao;
 import com.github.sanforjr2021.database.domain.GuildMember;
 import org.slf4j.Logger;

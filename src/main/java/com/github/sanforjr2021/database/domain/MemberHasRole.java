@@ -1,15 +1,11 @@
 package com.github.sanforjr2021.database.domain;
 
-import java.util.Date;
-
-//TODO: Create Corresponding DAO for it
-
-public class GuildUserHasRole {
+public class MemberHasRole {
     private String guildMemberId;
     private String roleId;
-    private Date date;
+    private long date;
 
-    public GuildUserHasRole(String guildMemberId, String roleId, Date date) {
+    public MemberHasRole(String guildMemberId, String roleId, long date) {
         this.guildMemberId = guildMemberId;
         this.roleId = roleId;
         this.date = date;
@@ -31,11 +27,11 @@ public class GuildUserHasRole {
         this.roleId = roleId;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 }

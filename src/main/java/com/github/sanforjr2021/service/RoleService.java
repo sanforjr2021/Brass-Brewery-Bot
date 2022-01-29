@@ -1,9 +1,12 @@
 package com.github.sanforjr2021.service;
 
+import com.github.sanforjr2021.database.dao.BuyableRoleDao;
 import com.github.sanforjr2021.database.dao.GuildMemberDao;
+import com.github.sanforjr2021.database.dao.MemberHasRoleDao;
 import com.github.sanforjr2021.database.dao.RankDao;
 import com.github.sanforjr2021.database.domain.BuyableRole;
 import com.github.sanforjr2021.database.domain.GuildMember;
+import com.github.sanforjr2021.database.domain.MemberHasRole;
 import com.github.sanforjr2021.database.domain.Rank;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -14,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.sanforjr2021.BrassBreweryBot.GUILD;
+import static com.github.sanforjr2021.util.TimeUtil.get1MonthAheadUnixTimeStamp;
+import static com.github.sanforjr2021.util.TimeUtil.getUnixTimeStamp;
 
 public class RoleService {
     /**
@@ -32,7 +37,7 @@ public class RoleService {
             boolean hasFound = false;
             Rank rank = rankArrayList.get(i);
             for (int x = 0; x < roleList.size() && hasFound == false; x++) {
-                if (rank.getId().equals( roleList.get(x).getId())) {
+                if (rank.getId().equals(roleList.get(x).getId())) {
                     hasFound = true;
                     if (highestRank < rank.getTier()) {
                         highestRank = rank.getTier();
@@ -47,14 +52,34 @@ public class RoleService {
         }
     }
 
-    public static boolean addBuyableRole(User user, BuyableRole role) throws SQLException {
-        boolean hasAddedRole = false;
-        GuildMember member = GuildMemberDao.get(user.getId());
-        if (member.getCurrency() >= role.getCost()) {
-            member.setCurrency(member.getCurrency() - role.getCost());
-            GuildMemberDao.write(member);
-            GUILD.addRoleToMember(GUILD.getMember(user), GUILD.getRoleById(role.getId()));
-            hasAddedRole = true;
+
+    /**
+     * Buys a role for a user
+     *  0 = not enough points, 1 = success, 2= DB error 3= already hasRole
+     * @param user
+     * @param role
+     * @return
+     */
+    public static int addBuyableRole(User user, BuyableRole role) {
+        int hasAddedRole = 1;
+        GuildMember member = null;
+        try {
+            member = GuildMemberDao.get(user.getId());
+            if (member.getCurrency() >= role.getCost()) {
+                if (!userHaveRole(user, role.getId())) {
+                    GUILD.addRoleToMember(user.getId(), GUILD.getRoleById(role.getId())).queue();
+                    MemberHasRole memberHasRole = new MemberHasRole(user.getId(), role.getId(), get1MonthAheadUnixTimeStamp());
+                    member.setCurrency(member.getCurrency() - role.getCost());
+                    GuildMemberDao.update(member);
+                    MemberHasRoleDao.write(memberHasRole);
+                }else{
+                    hasAddedRole = 3;
+                }
+            }else{
+                hasAddedRole = 0;
+            }
+        } catch (SQLException throwables) {
+            hasAddedRole = 2;
         }
         return hasAddedRole;
     }
@@ -81,4 +106,33 @@ public class RoleService {
         return false;
     }
 
+    public static void removeRole(User user, String roleID) {
+        Member member = GUILD.getMember(user);
+        Role role = GUILD.getRoleById(roleID);
+        GUILD.removeRoleFromMember(member, role).queue();
+    }
+
+    public static ArrayList<BuyableRole> getAllBuyableRoles() {
+        try {
+            return BuyableRoleDao.getAll();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Returns all members who's role has been there for at minimum 1 month.
+     *
+     * @return
+     */
+    public static ArrayList<MemberHasRole> getExpiredRoles() {
+        ArrayList<MemberHasRole> memberHasRoles = new ArrayList<MemberHasRole>();
+        try {
+            memberHasRoles = MemberHasRoleDao.getAllOld(getUnixTimeStamp());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return memberHasRoles;
+    }
 }
