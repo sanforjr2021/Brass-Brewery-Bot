@@ -5,9 +5,11 @@ import com.github.sanforjr2021.service.MessageService;
 import com.github.sanforjr2021.task.AddPointsFromMessage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.sql.SQLException;
@@ -61,6 +63,10 @@ public class MessageHandler extends ListenerAdapter {
         });
     }
 
+    @Override
+    public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
+        new OnGuildMemberJoin(event);   
+    }
     private Message getMessageFromList(String msgID, List<Message> messageList){
         for (Message msg: messageList) {
             if(msg.getId().equals(msgID)){

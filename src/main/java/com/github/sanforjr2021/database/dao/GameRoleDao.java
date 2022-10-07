@@ -15,7 +15,6 @@ public class GameRoleDao {
         GameRole gameRole; //Object type : name
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM Games WHERE ID = ?");
         statement.setString(1, id);
-        System.out.println(statement);
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             gameRole = new GameRole(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));

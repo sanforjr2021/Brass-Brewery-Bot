@@ -88,9 +88,6 @@ public class GuildMemberDao{
             throwables.printStackTrace();
         }
         return numRowsChanged;
-
-
-
     }
 
     /**

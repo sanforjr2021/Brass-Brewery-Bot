@@ -1,13 +1,7 @@
 package com.github.sanforjr2021.service;
 
-import com.github.sanforjr2021.database.dao.BuyableRoleDao;
-import com.github.sanforjr2021.database.dao.GuildMemberDao;
-import com.github.sanforjr2021.database.dao.MemberHasRoleDao;
-import com.github.sanforjr2021.database.dao.RankDao;
-import com.github.sanforjr2021.database.domain.BuyableRole;
-import com.github.sanforjr2021.database.domain.GuildMember;
-import com.github.sanforjr2021.database.domain.MemberHasRole;
-import com.github.sanforjr2021.database.domain.Rank;
+import com.github.sanforjr2021.database.dao.*;
+import com.github.sanforjr2021.database.domain.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -134,5 +128,34 @@ public class RoleService {
             throwables.printStackTrace();
         }
         return memberHasRoles;
+    }
+
+    public static boolean addRoleToUser(User user, String roleID){
+        try{
+            GUILD.addRoleToMember(GUILD.getMember(user), GUILD.getRoleById(roleID)).queue();
+            return true;
+        }
+        catch(Exception e){
+            System.err.println(e);
+            return false;
+        }
+    }
+    public static boolean updateDiscordInvite(DiscordInvite invite) {
+    try {
+        DiscordInviteDAO.update(invite);
+        return true;
+    }
+    catch(Exception e){
+        System.err.println(e);
+            return false;
+        }
+    }
+    public static ArrayList<DiscordInvite> getAllDiscordInvites(){
+        try {
+            return DiscordInviteDAO.getAll();
+        } catch (SQLException e) {
+            System.err.println(e);
+           return null;
+        }
     }
 }
